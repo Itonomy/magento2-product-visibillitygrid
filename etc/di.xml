@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Itonomy\ProductVisibilityGrid\Model\ResourceModel\ProductVisibilityGrid\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">catalog_product_entity</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product</argument>
+            <argument name="eventPrefix" xsi:type="string">itonomy_productvisibilitygrid_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">itonomy_productvisibilitygrid_grid_collection</argument>
+
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="entity_listing_data_source" xsi:type="string">Itonomy\ProductVisibilityGrid\Model\ResourceModel\ProductVisibilityGrid\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

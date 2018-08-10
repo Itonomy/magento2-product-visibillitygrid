@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Itonomy_ProductVisibilityGrid:index" title="Product visibility grid" module="Itonomy_ProductVisibilityGrid" sortOrder="90" parent="Magento_Backend::system" resource="Magento_Backend::system" />
+        <add id="Itonomy_ProductVisibilityGrid:index_grid" title="Grid" module="Itonomy_ProductVisibilityGrid" parent="Itonomy_ProductVisibilityGrid:index" action="productvisibility/index/grid" sortOrder="50" resource="Magento_Backend::system"/>
+    </menu>
+</config>
