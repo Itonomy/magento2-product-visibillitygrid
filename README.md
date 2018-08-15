@@ -12,15 +12,14 @@ This grid is making your life easier. It shows the different "visibility conditi
 * Reindex per product
 * Mass reindex selection
 
-<details>
- <summary><strong>Table of Contents</strong> (click to expand)</summary>
+<strong>Table of Contents</strong>
+* [Magento 1 Version](https://github.com/Itonomy/magento1-product-visibillitygrid)
 * [Requirements](#-requirements)
 * [Installation](#-installation)
 * [Usage](#️-usage)
 * [Version](#️-version)
 * [Credits](#️-credits)
 * [License](#-license)
-</details>
 
 # Requirements
 
