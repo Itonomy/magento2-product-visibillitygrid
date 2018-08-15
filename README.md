@@ -19,7 +19,7 @@ This grid is making your life easier. It shows the different "visibility conditi
 * [Usage](#️usage)
 * [Version](#️version)
 * [Credits](#️credits)
-* [License](https://github.com/Itonomy/magento2-product-visibillitygrid/blob/master/LICENSE)
+* [License](https://github.com/Itonomy/magento2-product-visibillitygrid/blob/master/LICENSE.txt)
 
 # Requirements
 
