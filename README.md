@@ -14,12 +14,12 @@ This grid is making your life easier. It shows the different "visibility conditi
 
 <strong>Table of Contents</strong>
 * [Magento 1 Version](https://github.com/Itonomy/magento1-product-visibillitygrid)
-* [Requirements](#-requirements)
-* [Installation](#-installation)
-* [Usage](#️-usage)
-* [Version](#️-version)
-* [Credits](#️-credits)
-* [License](#-license)
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Usage](#️usage)
+* [Version](#️version)
+* [Credits](#️credits)
+* [License](https://github.com/Itonomy/magento2-product-visibillitygrid/blob/master/LICENSE)
 
 # Requirements
 
