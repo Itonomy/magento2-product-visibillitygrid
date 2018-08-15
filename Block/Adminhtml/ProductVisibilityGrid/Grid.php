@@ -224,7 +224,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepares the grid mass action.
      *
-     * @return Itonomy\ProductVisibilityGrid\Block\Adminhtml\ProductVisibilityGrid\Block
+     * @return Itonomy\ProductVisibilityGrid\Block\Adminhtml\\Block
      */
     protected function _prepareMassaction()
     {

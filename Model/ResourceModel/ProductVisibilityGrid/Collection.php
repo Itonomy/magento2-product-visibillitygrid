@@ -288,7 +288,7 @@ class Collection extends DataCollection
      */
     public function addInWebsiteFilter($value)
     {
-        $this->getSelect()->where(\Zend_Db_Expr(
+        $this->getSelect()->where(new \Zend_Db_Expr(
             'product_website.product_id ' . ($value ? 'IS NOT NULL' : ' IS NULL')
         ));
 
