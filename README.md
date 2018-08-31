@@ -24,7 +24,7 @@ This grid is making your life easier. It shows the different "visibility conditi
 # Requirements
 
 - magento 2 community
-- php: ~7.1
+- php: ~7.0
 - magento/magento-composer-installer
 
 # Installation
