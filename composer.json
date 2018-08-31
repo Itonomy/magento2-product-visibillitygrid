@@ -19,13 +19,5 @@
         "psr-4": {
             "Itonomy\\ProductVisibilityGrid\\": ""
         }
-    },
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Itonomy/ProductVisibilityGrid"
-            ]
-        ]
     }
 }
