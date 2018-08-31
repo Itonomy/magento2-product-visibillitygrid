@@ -56,6 +56,8 @@ You can also drop us a comment at ben.vansteenbergen@itonomy.nl
 # Version
 
 - Updated to version 1.0.0 to achieve a first version
+- Updated to version 1.0.1 adding readme and fixing bug regarding filtering website/store 
+- Updated to version 1.0.2 bugfixes and moving "is_visible_in_cat" to subselect
 
 ## Credits
 
