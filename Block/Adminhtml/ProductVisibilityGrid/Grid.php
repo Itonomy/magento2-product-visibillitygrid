@@ -185,8 +185,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'width' => '80px',
                 'index' => 'is_online_in_cat',
                 'type'  => 'options',
-                'options' => $this->boolean->getOptionArray(),
-                'filter' => false
+                'options' => $this->boolean->getOptionArray()
             ));
 
         $this->addColumn('status',
@@ -293,6 +292,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 break;
             case 'in_price_index':
                 $this->getCollection()->addInPriceIndexFilter((int)$value);
+                break;
+            case 'is_online_in_cat':
+                $this->getCollection()->addIsVisibleInCategoryFilter((int)$value);
                 break;
             default:
                 parent::_addColumnFilterToCollection($column);

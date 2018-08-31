@@ -24,6 +24,8 @@ class Collection extends DataCollection
     protected $productCollection;
     protected $categoryRepository;
     protected $stockHelper;
+    protected $sortField;
+    protected $sortDir;
 
     /**
      * Maps field aliases to real fields.
@@ -185,7 +187,29 @@ class Collection extends DataCollection
             $this->_addAttribute($attribute);
         }
 
+        $this->addCategoryVisibility();
+
         return $this;
+    }
+
+    protected function addCategoryVisibility(){
+        // Init Root [Default] category
+        $category = $this->categoryRepository->get(2);
+        $this->productCollection->addStoreFilter($this->storeId);
+        $this->collectionFilter->filter($this->productCollection, $category);
+        $this->stockHelper->addIsInStockFilterToCollection($this->productCollection);
+        $this->productCollection->addAttributeToFilter('status',array('eq' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED));
+
+        $subSelect = $this->productCollection->getSelect();
+        $this->productCollection->getSelect()
+            ->reset(\Zend_Db_Select::COLUMNS)
+            ->columns(['p_entity_id' => 'e.entity_id'])
+            ->columns(['is_online_in_cat'=> new \Zend_Db_Expr('IF(e.entity_id,1,0)')]);
+
+        $this->getSelect()->columns('category_collection.is_online_in_cat');
+        $this->getSelect()->joinLeft(['category_collection'=>$subSelect], 'main_table.entity_id = category_collection.p_entity_id');
+
+        //echo $this->productCollection->getSelect();
     }
 
     /**
@@ -296,6 +320,21 @@ class Collection extends DataCollection
     }
 
     /**
+     * Adds a filter on the calculated field 'Is visisble in category'.
+     *
+     * @param $value boolean Value of in_website to filter.
+     * @return Itonomy\ProductVisibilityGrid\Model\ResourceModel\ProductVisibilityGrid\Collection
+     */
+    public function addIsVisibleInCategoryFilter($value)
+    {
+        $this->getSelect()->where(new \Zend_Db_Expr(
+            'category_collection.p_entity_id ' . ($value ? 'IS NOT NULL' : ' IS NULL')
+        ));
+
+        return $this;
+    }
+
+    /**
      * Adds a filter on the calculated field 'In Category'.
      *
      * @param $value boolean Value of in_category to filter.
@@ -372,67 +411,21 @@ class Collection extends DataCollection
         $this->storeId = $storeId;
         return $this;
     }
+
     public function _afterLoad()
     {
-        $this->processItemData();
         return parent::_afterLoad();
     }
 
     protected function processItemData()
     {
-        $category = $this->categoryRepository->get(2);
-        $this->collectionFilter->filter($this->productCollection, $category);
-        $this->stockHelper->addIsInStockFilterToCollection($this->productCollection);
-
-        $column = 'is_online_in_cat';
-
-        foreach ($this->getItems() as $item) {
-
-            if(in_array($item->getEntityId(), $this->productCollection->getAllIds())){
-                $item[$column] = true;
-            } else {
-                $item[$column] = false;
-            }
-        }
-
-        // CURL TO PDP TO SEE IF PRODUCT PAGE IS SHOWING
-        /* $baseUrl = $this->storeManager->getStore()->getBaseUrl();
-        $column = 'is_online';
-
-        foreach ($this->getItems() as $item) {
-
-            $productUrl = sprintf('%s/catalog/product/view/id/%s',$baseUrl, $item->getEntityId());
-            $this->curl->get($productUrl);
-
-            if($this->curl->getStatus() != '200'){
-                $item[$column] = false;
-            } else {
-                $item[$column] = true;
-            }
-        }
-        */
-        // CURL TO PDP TO SEE IF PRODUCT PAGE IS SHOWING
-        /* $baseUrl = $this->storeManager->getStore()->getBaseUrl();
-        $column = 'is_online';
-
-        foreach ($this->getItems() as $item) {
-
-            $productUrl = sprintf('%s/catalog/product/view/id/%s',$baseUrl, $item->getEntityId());
-            $this->curl->get($productUrl);
-
-            if($this->curl->getStatus() != '200'){
-                $item[$column] = false;
-            } else {
-                $item[$column] = true;
-            }
-        }
-        */
 
     }
 
     protected function _addColumnFilterToCollection($column)
     {
         $value = $column->getFilter()->getValue();
+
         if (!isset($value)) {
             parent::_addColumnFilterToCollection($column);
             return $this;
@@ -453,6 +446,10 @@ class Collection extends DataCollection
                 break;
             case 'in_price_index':
                 $this->getCollection()->addInPriceIndexFilter((int)$value);
+                break;
+            case 'is_online_in_cat':
+                echo 'a';
+                $this->addIsVisibleInCategoryFilter((int)$value);
                 break;
             case 'is_online':
                 $this->getCollection();
