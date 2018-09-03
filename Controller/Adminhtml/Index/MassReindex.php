@@ -9,7 +9,7 @@
 
 namespace Itonomy\ProductVisibilityGrid\Controller\Adminhtml\Index;
 
-use Itonomy\ProdouctVisiblityGrid\Model\ProductIndexer;
+use Itonomy\ProductVisibilityGrid\Model\ProductIndexer;
 
 class MassReindex extends \Magento\Backend\App\Action
 {
