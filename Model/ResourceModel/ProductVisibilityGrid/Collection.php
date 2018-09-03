@@ -20,7 +20,7 @@ class Collection extends DataCollection
 {
     protected $_idFieldName = 'entity_id';
     protected $storeId = 0;
-    protected $attributes = array('name', 'status', 'visibility');
+    protected $attributes = ['name', 'status', 'visibility'];
     protected $productCollection;
     protected $categoryRepository;
     protected $stockHelper;
@@ -32,13 +32,13 @@ class Collection extends DataCollection
      *
      * @var array
      */
-    protected $_map = array('fields' => array(
+    protected $_map = ['fields' => [
         'entity_id' => 'main_table.entity_id',
         'type_id' => 'main_table.type_id',
         'sku' => 'main_table.sku',
         'visibility' => 'flat_table.visibility',
         'status' => 'product_status.value'
-    ));
+    ]];
 
     /**
      * @var \Magento\Framework\HTTP\Client\Curl
@@ -102,59 +102,59 @@ class Collection extends DataCollection
             if ($this->getConnection()->isTableExists($flatTable)) {
                 // Join with flat table, if it exists.
                 $select->joinLeft(
-                    array('flat_table' => $flatTable),
+                    ['flat_table' => $flatTable],
                     'flat_table.entity_id = main_table.entity_id',
-                    array(
+                    [
                         'in_flat_table' => new \Zend_Db_Expr('flat_table.entity_id IS NOT NULL'),
                         //'visibility' => new \Zend_Db_Expr('COALESCE(flat_table.visibility, ' . Visibility::VISIBILITY_NOT_VISIBLE . ')')
-                    )
+                    ]
                 );
             } else {
                 // Add columns in_flat_table = false and visibility = not visible, otherwise.
-                $select->columns(array(
+                $select->columns([
                     'in_flat_table' => new \Zend_Db_Expr('false'),
                     //'visibility' => new \Zend_Db_Expr(Visibility::VISIBILITY_NOT_VISIBLE)
-                ));
+                ]);
             }
 
             // Join with product website link table.
             $select->joinLeft(
-                array('product_website' => $this->getTable('catalog_product_website')),
+                ['product_website' => $this->getTable('catalog_product_website')],
                 'product_website.product_id = main_table.entity_id'
                 . ' AND product_website.website_id = \'' . $store->getWebsiteId() . '\'',
-                array('in_website' => new \Zend_Db_Expr('product_website.product_id IS NOT NULL'))
+                ['in_website' => new \Zend_Db_Expr('product_website.product_id IS NOT NULL')]
             );
 
             // Join with category product link table.
             $select->joinLeft(
-                array('category_product' => $this->getTable('catalog_category_product_index_store' . $store->getId())),
+                ['category_product' => $this->getTable('catalog_category_product_index_store' . $store->getId())],
                 'category_product.product_id = main_table.entity_id'
                 . ' AND category_product.category_id = \'' . $store->getRootCategoryId() . '\''
                 . ' AND category_product.store_id = \'' . $this->storeId . '\''
                 . ' AND category_product.visibility > \'' . Visibility::VISIBILITY_NOT_VISIBLE . '\'',
-                array('in_category' => new \Zend_Db_Expr('category_product.product_id IS NOT NULL'))
+                ['in_category' => new \Zend_Db_Expr('category_product.product_id IS NOT NULL')]
             );
 
             // Join with stock status table. Default 0 because Magento is not website store differences (default = 0)
             $select->joinLeft(
-                array('stock_status' => $this->getTable('cataloginventory_stock_status')),
+                ['stock_status' => $this->getTable('cataloginventory_stock_status')],
                 'stock_status.product_id = main_table.entity_id'
                 . ' AND stock_status.stock_id = \'1\''
                 . ' AND stock_status.website_id = \'' . Store::DEFAULT_STORE_ID . '\'',
-                array('in_stock' => new \Zend_Db_Expr('COALESCE(stock_status.stock_status, 0)'))
+                ['in_stock' => new \Zend_Db_Expr('COALESCE(stock_status.stock_status, 0)')]
             );
 
             // Join with price index table.
             $select->joinLeft(
-                array('price_index' => $this->getTable('catalog_product_index_price')),
+                ['price_index' => $this->getTable('catalog_product_index_price')],
                 'price_index.entity_id = main_table.entity_id'
                 . ' AND price_index.customer_group_id = \'' . \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID . '\''
                 . ' AND price_index.website_id = \'' . $store->getWebsiteId() . '\'',
-                array('in_price_index' => new \Zend_Db_Expr('price_index.entity_id IS NOT NULL'))
+                ['in_price_index' => new \Zend_Db_Expr('price_index.entity_id IS NOT NULL')]
             );
         } else {
             // Otherwise, join with all flat tables.
-            $columns = array();
+            $columns = [];
 
             // Iterate over all stores.
             foreach ($this->storeManager->getStores() as $store) {
@@ -169,9 +169,9 @@ class Collection extends DataCollection
 
                 // Join with the flat table for this store.
                 $select->joinLeft(
-                    array($flatTableAlias => $flatTable),
+                    [$flatTableAlias => $flatTable],
                     $flatTableAlias . '.entity_id = main_table.entity_id',
-                    array()
+                    []
                 );
 
                 // Add the value for this flat table.
@@ -179,7 +179,7 @@ class Collection extends DataCollection
             }
 
             // The column in_flat_table should be true if the product is in all flat tables, otherwise false.
-            $select->columns(array('in_flat_table' => new \Zend_Db_Expr('false OR (' . implode(' AND ', $columns) . ')')));
+            $select->columns(['in_flat_table' => new \Zend_Db_Expr('false OR (' . implode(' AND ', $columns) . ')')]);
         }
 
         // Join other tables.
@@ -192,13 +192,14 @@ class Collection extends DataCollection
         return $this;
     }
 
-    protected function addCategoryVisibility(){
+    protected function addCategoryVisibility()
+    {
         // Init Root [Default] category
         $category = $this->categoryRepository->get(2);
         $this->productCollection->addStoreFilter($this->storeId);
         $this->collectionFilter->filter($this->productCollection, $category);
         $this->stockHelper->addIsInStockFilterToCollection($this->productCollection);
-        $this->productCollection->addAttributeToFilter('status',array('eq' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED));
+        $this->productCollection->addAttributeToFilter('status', ['eq' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED]);
 
         $subSelect = $this->productCollection->getSelect();
         $this->productCollection->getSelect()
@@ -229,11 +230,11 @@ class Collection extends DataCollection
 
         // Join with default value table for the attribute.
         $select->joinLeft(
-            array($table => $this->getTable('catalog_product_entity') . '_' . $attributeType),
+            [$table => $this->getTable('catalog_product_entity') . '_' . $attributeType],
             $table . '.entity_id = main_table.entity_id'
             . ' AND ' . $table . '.attribute_id = \'' . $attributeId . '\''
             . ' AND ' . $table . '.store_id = \'' . Store::DEFAULT_STORE_ID . '\'',
-            array()
+            []
         );
 
         // Check if a store is selected.
@@ -241,21 +242,21 @@ class Collection extends DataCollection
             // A store is selected.
             // Join with store value table for the attribute.
             $select->joinLeft(
-                array($tableStore => $this->getTable('catalog_product_entity') . '_' . $attributeType),
+                [$tableStore => $this->getTable('catalog_product_entity') . '_' . $attributeType],
                 $tableStore . '.entity_id = main_table.entity_id'
                 . ' AND ' . $tableStore . '.attribute_id = \'' . $attributeId . '\''
                 . ' AND ' . $tableStore . '.store_id = \'' . $this->storeId . '\'',
-                array()
+                []
             );
 
             // Define a column for the store value with a fallback to the default value.
-            $select->columns(array(
+            $select->columns([
                 $name => new \Zend_Db_Expr('IF(' . $tableStore . '.value_id IS NOT NULL, ' . $tableStore . '.value, ' . $table . '.value)')
-            ));
+            ]);
         } else {
             // No store has been selected.
             // Define a column for the default value.
-            $select->columns(array($name => new \Zend_Db_Expr($table . '.value')));
+            $select->columns([$name => new \Zend_Db_Expr($table . '.value')]);
 
             // Add the field mapping to make _getConditionSql function on this field.
             $this->_map['fields'][$name] = $table . '.value';
@@ -284,7 +285,7 @@ class Collection extends DataCollection
             }
         } else {
             // Filer on all flat tables, otherwise.
-            $columns = array();
+            $columns = [];
 
             foreach ($this->storeManager->getStores() as $store) {
                 $storeId = $store->getId();
@@ -419,7 +420,6 @@ class Collection extends DataCollection
 
     protected function processItemData()
     {
-
     }
 
     protected function _addColumnFilterToCollection($column)
@@ -460,6 +460,4 @@ class Collection extends DataCollection
 
         return $this;
     }
-
-
 }

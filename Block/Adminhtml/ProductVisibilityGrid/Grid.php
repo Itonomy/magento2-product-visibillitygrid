@@ -39,8 +39,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Eav\Model\Entity\Attribute\Source\Boolean $boolean,
         array $data = []
-    )
-    {
+    ) {
+    
 
         parent::__construct($context, $backendHelper, $data);
 
@@ -57,7 +57,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
         $this->setVarNameFilter('product_filter');
-
     }
 
     /**
@@ -94,128 +93,154 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id',
-            array(
+        $this->addColumn(
+            'entity_id',
+            [
                 'header'=> __('ID'),
                 'width' => '100px',
                 'type'  => 'number',
                 'index' => 'entity_id',
-            ));
-        $this->addColumn('name',
-            array(
+            ]
+        );
+        $this->addColumn(
+            'name',
+            [
                 'header'=> __('Name'),
                 'index' => 'name',
-            ));
+            ]
+        );
 
-        $this->addColumn('type_id',
-            array(
+        $this->addColumn(
+            'type_id',
+            [
                 'header'=> __('Type'),
                 'width' => '80px',
                 'index' => 'type_id',
                 'type'  => 'options',
                 'options' => $this->type->getOptionArray(),
-            ));
+            ]
+        );
 
-        $this->addColumn('sku',
-            array(
+        $this->addColumn(
+            'sku',
+            [
                 'header'=> __('SKU'),
                 'width' => '120px',
                 'index' => 'sku',
-            ));
+            ]
+        );
 
-        $this->addColumn('in_flat_table',
-            array(
+        $this->addColumn(
+            'in_flat_table',
+            [
                 'header'=> __('In Flat Table'),
                 'width' => '80px',
                 'index' => 'in_flat_table',
                 'type'  => 'options',
                 'options' => $this->boolean->getOptionArray()
-            ));
+            ]
+        );
 
         if ($this->_getStoreId() != 0) {
-            $this->addColumn('in_website',
-                array(
+            $this->addColumn(
+                'in_website',
+                [
                     'header'=> __('In Website'),
                     'width' => '80px',
                     'index' => 'in_website',
                     'type'  => 'options',
                     'options' => $this->boolean->getOptionArray()
-                ));
+                ]
+            );
 
-            $this->addColumn('in_category',
-                array(
+            $this->addColumn(
+                'in_category',
+                [
                     'header'=> __('In Category'),
                     'width' => '80px',
                     'index' => 'in_category',
                     'type'  => 'options',
                     'options' => $this->boolean->getOptionArray()
-                ));
+                ]
+            );
 
-            $this->addColumn('in_stock',
-                array(
+            $this->addColumn(
+                'in_stock',
+                [
                     'header'=> __('In Stock'),
                     'width' => '80px',
                     'index' => 'in_stock',
                     'type'  => 'options',
                     'options' => $this->boolean->getOptionArray()
-                ));
+                ]
+            );
 
-            $this->addColumn('in_price_index',
-                array(
+            $this->addColumn(
+                'in_price_index',
+                [
                     'header'=> __('In Price Index'),
                     'width' => '80px',
                     'index' => 'in_price_index',
                     'type' => 'options',
                     'options' => $this->boolean->getOptionArray()
-                ));
+                ]
+            );
 
-            $this->addColumn('visibility',
-                array(
+            $this->addColumn(
+                'visibility',
+                [
                     'header'=> __('Visibility'),
                     'width' => '80px',
                     'index' => 'visibility',
                     'type'  => 'options',
                     'options' => $this->visibility->getOptionArray()
-                ));
+                ]
+            );
         }
 
-        $this->addColumn('is_online_in_cat',
-            array(
+        $this->addColumn(
+            'is_online_in_cat',
+            [
                 'header'=> __('Is visible in category'),
                 'width' => '80px',
                 'index' => 'is_online_in_cat',
                 'type'  => 'options',
                 'options' => $this->boolean->getOptionArray()
-            ));
+            ]
+        );
 
-        $this->addColumn('status',
-            array(
+        $this->addColumn(
+            'status',
+            [
                 'header'=> __('Status'),
                 'width' => '80px',
                 'index' => 'status',
                 'type'  => 'options',
                 'options' => $this->status->getOptionArray()
-            ));
+            ]
+        );
 
-        $this->addColumn('action',
-            array(
+        $this->addColumn(
+            'action',
+            [
                 'header'    => __('Action'),
                 'width'     => '50px',
                 'type'      => 'action',
                 'getter'     => 'getId',
-                'actions'   => array(
-                    array(
+                'actions'   => [
+                    [
                         'caption' => __('Reindex'),
-                        'url'     => array(
+                        'url'     => [
                             'base'=> ('*/*/reindex'.'/store/'.$this->getRequest()->getParam('store'))
-                        ),
+                        ],
                         'field'   => 'id'
-                    )
-                ),
+                    ]
+                ],
                 'filter'    => false,
                 'sortable'  => false,
                 'index'     => 'stores'
-            ));
+            ]
+        );
 
         return parent::_prepareColumns();
     }
@@ -230,10 +255,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('product');
 
-        $this->getMassactionBlock()->addItem('reindex', array(
+        $this->getMassactionBlock()->addItem('reindex', [
             'label'=> __('Reindex'),
             'url'  => $this->getUrl('*/*/massReindex', ['store'=>$this->getRequest()->getParam('store')]),
-        ));
+        ]);
 
         return $this;
     }
@@ -245,8 +270,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/grid',
-            array('_current'=>true));
+        return $this->getUrl(
+            '*/*/grid',
+            ['_current'=>true]
+        );
     }
 
     /**
@@ -257,10 +284,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/product/edit', array(
+        return $this->getUrl('catalog/product/edit', [
                 'store'=>$this->getRequest()->getParam('store'),
-                'id'=>$row->getId())
-        );
+                'id'=>$row->getId()]);
     }
 
     /**

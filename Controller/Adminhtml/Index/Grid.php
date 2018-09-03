@@ -39,7 +39,7 @@ class Grid extends \Magento\Backend\App\Action
     {
         $resultPage = $this->resultPageFactory->create();
 
-        if($this->getRequest()->getParam('isAjax')){
+        if ($this->getRequest()->getParam('isAjax')) {
             $resultPage->addHandle('productvisibility_index_reload');
             return $resultPage;
         } else {

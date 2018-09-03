@@ -65,13 +65,13 @@ class ProductIndexer
              
     /**
      * Gets indexer instance by indexer code.
-     * 
+     *
      * @param string $indexerCode Indexer code
      *
      * @return void
      */
     protected function getIndexerByCode($indexerCode)
-    {      
+    {
         return $this->indexerFactory->create()->load($indexerCode);
     }
 }

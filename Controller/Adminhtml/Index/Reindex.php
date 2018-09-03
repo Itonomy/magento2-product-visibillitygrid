@@ -48,7 +48,7 @@ class Reindex extends \Magento\Backend\App\Action
         $productIdsForIndexing = [$this->getRequest()->getParam('id')];
         $indexResult = $this->productIndexer->reindexList($productIdsForIndexing);
 
-        if($indexResult == 1){
+        if ($indexResult == 1) {
             $this->messageManager->addSuccessMessage('Product id '.join($productIdsForIndexing).' is succesfully scheduled for index');
         } else {
             $this->messageManager->addErrorMessage('Product id '.join($productIdsForIndexing).' is not able to be scheduled indexed');

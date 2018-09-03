@@ -48,13 +48,13 @@ class MassReindex extends \Magento\Backend\App\Action
 
         $productIdsForIndexing = $this->getRequest()->getParam('product');
 
-        if(count($productIdsForIndexing) > 100){
+        if (count($productIdsForIndexing) > 100) {
             $this->messageManager->addErrorMessage('Hey! Take it ease administrator, we can only handle so much as a 100 products!');
         }
 
         $indexResult = $this->productIndexer->reindexList($productIdsForIndexing);
 
-        if($indexResult == 1){
+        if ($indexResult == 1) {
             $this->messageManager->addSuccessMessage('Product id '.join($productIdsForIndexing).' is succesfully scheduled for index');
         } else {
             $this->messageManager->addErrorMessage('Product id '.join($productIdsForIndexing).' is not able to be scheduled indexed');
