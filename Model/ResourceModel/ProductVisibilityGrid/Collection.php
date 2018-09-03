@@ -448,7 +448,6 @@ class Collection extends DataCollection
                 $this->getCollection()->addInPriceIndexFilter((int)$value);
                 break;
             case 'is_online_in_cat':
-                echo 'a';
                 $this->addIsVisibleInCategoryFilter((int)$value);
                 break;
             case 'is_online':
