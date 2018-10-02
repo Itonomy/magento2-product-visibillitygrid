@@ -60,7 +60,7 @@ You can also drop us a comment at ben.vansteenbergen@itonomy.nl
 - Updated to version 1.0.2 bugfixes and moving "is_visible_in_cat" to subselect
 - Updated to version 1.0.3 bugfixes PHPCS feedback "echo 'a'"
 - Updated to version 1.0.4 bugfixes DI compile error
-
+- Updated to version 1.0.5 Update for webshop not using flat tables
 
 ## Credits
 
