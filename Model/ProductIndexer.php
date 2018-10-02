@@ -2,6 +2,7 @@
 
 namespace Itonomy\ProductVisibilityGrid\Model;
 
+use Magento\Framework\Indexer\IndexerInterface;
 use \Magento\Indexer\Model\IndexerFactory;
 
 /**
@@ -56,9 +57,12 @@ class ProductIndexer
     {
         $indexerCodes = $this->getIndexerCodes();
         foreach ($indexerCodes as $indexerCode) {
-            $this->getIndexerByCode($indexerCode)->reindexList(
-                \array_unique($productIds)
-            );
+            $indexer = $this->getIndexerByCode($indexerCode);
+            if ($indexer instanceof IndexerInterface) {
+                $indexer->reindexList(
+                    \array_unique($productIds)
+                );
+            }
         }
         return true;
     }
@@ -67,11 +71,15 @@ class ProductIndexer
      * Gets indexer instance by indexer code.
      *
      * @param string $indexerCode Indexer code
+     * @return IndexerInterface | false
      *
-     * @return void
      */
     protected function getIndexerByCode($indexerCode)
     {
-        return $this->indexerFactory->create()->load($indexerCode);
+        try {
+            return $this->indexerFactory->create()->load($indexerCode);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
