@@ -179,7 +179,8 @@ class Collection extends DataCollection
             }
 
             // The column in_flat_table should be true if the product is in all flat tables, otherwise false.
-            $select->columns(['in_flat_table' => new \Zend_Db_Expr('false OR (' . implode(' AND ', $columns) . ')')]);
+            $orExp = !empty($columns) ? ' OR (' . implode(' AND ', $columns) . ')':'';
+            $select->columns(['in_flat_table' => new \Zend_Db_Expr('false' . $orExp)]);
         }
 
         // Join other tables.
