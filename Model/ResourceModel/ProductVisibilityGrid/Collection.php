@@ -125,9 +125,17 @@ class Collection extends DataCollection
                 ['in_website' => new \Zend_Db_Expr('product_website.product_id IS NOT NULL')]
             );
 
+            $categoryTable = $this->getTable('catalog_category_product_index_store') . $store->getId();
+
+            if ($this->getConnection()->isTableExists($categoryTable)) {
+                // Use the one above
+            } else {
+                $categoryTable = $this->getTable('catalog_category_product_index');
+            }
+            
             // Join with category product link table.
             $select->joinLeft(
-                ['category_product' => $this->getTable('catalog_category_product_index_store' . $store->getId())],
+                ['category_product' => $categoryTable],
                 'category_product.product_id = main_table.entity_id'
                 . ' AND category_product.category_id = \'' . $store->getRootCategoryId() . '\''
                 . ' AND category_product.store_id = \'' . $this->storeId . '\''
@@ -206,9 +214,9 @@ class Collection extends DataCollection
         $this->productCollection->getSelect()
             ->reset(\Zend_Db_Select::COLUMNS)
             ->columns(['p_entity_id' => 'e.entity_id'])
-            ->columns(['is_online_in_cat'=> new \Zend_Db_Expr('IF(e.entity_id,1,0)')]);
+            ->columns(['is_online_in_cat_sub'=> new \Zend_Db_Expr('IF(e.entity_id,1,0)')]);
 
-        $this->getSelect()->columns('category_collection.is_online_in_cat');
+        $this->getSelect()->columns(['is_online_in_cat'=> new \Zend_Db_Expr('IF(category_collection.is_online_in_cat_sub,1,0)')]);
         $this->getSelect()->joinLeft(['category_collection'=>$subSelect], 'main_table.entity_id = category_collection.p_entity_id');
 
         //echo $this->productCollection->getSelect();
