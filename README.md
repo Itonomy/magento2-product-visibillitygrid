@@ -62,6 +62,7 @@ You can also drop us a comment at ben.vansteenbergen@itonomy.nl
 - Updated to version 1.0.4 bugfixes DI compile error
 - Updated to version 1.0.5 Update for webshop not using flat tables
 - Updated to version 1.0.6 Fix SQL error when no products are in Magento
+- Updated to version 1.0.7 Fix for 2.1.8 support and fix for null values in "visible in category"
 
 ## Credits
 
