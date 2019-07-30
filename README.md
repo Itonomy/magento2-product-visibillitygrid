@@ -2,9 +2,9 @@
 
 **Did you every wonder why your product is not showing up in a category in Magento?**
 
-Magento has a complex way of building a product collection. Due to several conditions, indexes, plugins and other complexity, determining whether a product should show is not that straightforward. 
+Magento has a complex way of building a product collection. Due to several conditions, indexes, plugins and other complexities determining whether a product should show is not that straightforward. 
 
-This grid is making your life easier. It shows the different "visibility conditions" in columns. And. Whether a product is or isn't showing up in your category (collection).
+This grid will make your life easier. It shows the different "visibility conditions" in columns and whether a product is or isn't showing up in your category (collection).
 <img align="center" src="./docs/img/grid.png" height="400">
 
 * Determine whether a product is showing in category (yes/no)
@@ -23,9 +23,9 @@ This grid is making your life easier. It shows the different "visibility conditi
 
 # Requirements
 
-- magento 2 community
-- php: >5.6
-- magento/magento-composer-installer
+- Magento: >= 2.2
+- PHP: >= 7.0
+- Composer
 
 # Installation
 
@@ -45,13 +45,11 @@ This grid is making your life easier. It shows the different "visibility conditi
 
         http://[yourstore.net]/[adminslug]/productvisibility/index/grid
         
-Or throught the menu:
+Or through the menu:
 
 <img align="center" src="./docs/img/menu.png" height="400">
 
-Feel free to contribute, and contact me for any issues.
-
-You can also drop us a comment at ben.vansteenbergen@itonomy.nl
+Feel free to contribute and if there are any problems don't hesitate to open an issue.
 
 # Version
 
@@ -63,6 +61,7 @@ You can also drop us a comment at ben.vansteenbergen@itonomy.nl
 - Updated to version 1.0.5 Update for webshop not using flat tables
 - Updated to version 1.0.6 Fix SQL error when no products are in Magento
 - Updated to version 1.0.7 Fix for 2.1.8 support and fix for null values in "visible in category"
+- Updated to version 1.0.8 Update some documentation, minor fixes.
 
 ## Credits
 
