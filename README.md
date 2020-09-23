@@ -23,7 +23,7 @@ This grid will make your life easier. It shows the different "visibility conditi
 
 # Requirements
 
-- Magento: >= 2.2
+- Magento: >= 2.3
 - PHP: >= 7.0
 - Composer
 
@@ -62,6 +62,7 @@ Feel free to contribute and if there are any problems don't hesitate to open an 
 - Updated to version 1.0.6 Fix SQL error when no products are in Magento
 - Updated to version 1.0.7 Fix for 2.1.8 support and fix for null values in "visible in category"
 - Updated to version 1.0.8 Update some documentation, minor fixes.
+- Updated to version 2.0.0 Magento 2.3 compatablity. Magento 2.2 support is dropped. Fixed #12 and #13
 
 ## Credits
 
