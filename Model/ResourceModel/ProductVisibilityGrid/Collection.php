@@ -240,7 +240,7 @@ class Collection extends DataCollection
         // Join with default value table for the attribute.
         $select->joinLeft(
             [$table => $this->getTable('catalog_product_entity') . '_' . $attributeType],
-            $table . '.entity_id = main_table.entity_id'
+            $table . '.value_id= main_table.entity_id'
             . ' AND ' . $table . '.attribute_id = \'' . $attributeId . '\''
             . ' AND ' . $table . '.store_id = \'' . Store::DEFAULT_STORE_ID . '\'',
             []
@@ -252,7 +252,7 @@ class Collection extends DataCollection
             // Join with store value table for the attribute.
             $select->joinLeft(
                 [$tableStore => $this->getTable('catalog_product_entity') . '_' . $attributeType],
-                $tableStore . '.entity_id = main_table.entity_id'
+                $tableStore . '.value_id = main_table.entity_id'
                 . ' AND ' . $tableStore . '.attribute_id = \'' . $attributeId . '\''
                 . ' AND ' . $tableStore . '.store_id = \'' . $this->storeId . '\'',
                 []
