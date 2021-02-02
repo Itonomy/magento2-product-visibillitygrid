@@ -63,7 +63,7 @@ Feel free to contribute and if there are any problems don't hesitate to open an 
 - Updated to version 1.0.7 Fix for 2.1.8 support and fix for null values in "visible in category"
 - Updated to version 1.0.8 Update some documentation, minor fixes.
 - Updated to version 2.0.0 Magento 2.3 compatablity. Magento 2.2 support is dropped. Fixed #12 and #13
-
+- Updated to version 2.1.0 Magento Fixing issues for compatibility with commerce and root category issue
 ## Credits
 
 * Jerrol Etheredge (former co-worker who created the M1 version)
