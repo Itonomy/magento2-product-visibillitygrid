@@ -132,7 +132,7 @@ class Collection extends DataCollection
             // Join with product website link table.
             $select->joinLeft(
                 ['product_website' => $this->getTable('catalog_product_website')],
-                'product_website.product_id = main_table.
+                'product_website.product_id = main_table.entity_id
                 '
                 . ' AND product_website.website_id = \'' . $store->getWebsiteId() . '\'',
                 ['in_website' => new \Zend_Db_Expr('product_website.product_id IS NOT NULL')]
