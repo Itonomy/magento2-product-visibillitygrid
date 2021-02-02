@@ -8,6 +8,8 @@
 
 namespace Itonomy\ProductVisibilityGrid\Model\ResourceModel\ProductVisibilityGrid;
 
+use Magento\Framework\App\ProductMetadata;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
@@ -26,6 +28,8 @@ class Collection extends DataCollection
     protected $stockHelper;
     protected $sortField;
     protected $sortDir;
+    protected $platformMetaData;
+    protected $identityField;
 
     /**
      * Maps field aliases to real fields.
@@ -57,6 +61,7 @@ class Collection extends DataCollection
         CollectionFilter $collectionFilter,
         CategoryRepositoryInterface $categoryRepository,
         Stock $stockHelper,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
@@ -77,6 +82,13 @@ class Collection extends DataCollection
         $this->collectionFilter = $collectionFilter;
         $this->categoryRepository = $categoryRepository;
         $this->stockHelper = $stockHelper;
+        $this->platformMetaData = $productMetadata;
+
+        if($this->getIsCommerce() == true){
+            $this->identityField = 'row_id';
+        } else {
+            $this->identityField = 'entity_id';
+        }
     }
     public function _beforeLoad()
     {
@@ -103,9 +115,9 @@ class Collection extends DataCollection
                 // Join with flat table, if it exists.
                 $select->joinLeft(
                     ['flat_table' => $flatTable],
-                    'flat_table.entity_id = main_table.entity_id',
+                    'flat_table.'.$this->identityField.' = main_table.'.$this->identityField,
                     [
-                        'in_flat_table' => new \Zend_Db_Expr('flat_table.entity_id IS NOT NULL'),
+                        'in_flat_table' => new \Zend_Db_Expr('flat_table.'.$this->identityField.' IS NOT NULL'),
                         //'visibility' => new \Zend_Db_Expr('COALESCE(flat_table.visibility, ' . Visibility::VISIBILITY_NOT_VISIBLE . ')')
                     ]
                 );
@@ -120,7 +132,8 @@ class Collection extends DataCollection
             // Join with product website link table.
             $select->joinLeft(
                 ['product_website' => $this->getTable('catalog_product_website')],
-                'product_website.product_id = main_table.entity_id'
+                'product_website.product_id = main_table.
+                '
                 . ' AND product_website.website_id = \'' . $store->getWebsiteId() . '\'',
                 ['in_website' => new \Zend_Db_Expr('product_website.product_id IS NOT NULL')]
             );
@@ -132,7 +145,7 @@ class Collection extends DataCollection
             } else {
                 $categoryTable = $this->getTable('catalog_category_product_index');
             }
-            
+
             // Join with category product link table.
             $select->joinLeft(
                 ['category_product' => $categoryTable],
@@ -178,12 +191,12 @@ class Collection extends DataCollection
                 // Join with the flat table for this store.
                 $select->joinLeft(
                     [$flatTableAlias => $flatTable],
-                    $flatTableAlias . '.entity_id = main_table.entity_id',
+                    $flatTableAlias . '.'.$this->identityField.' = main_table.'.$this->identityField.'',
                     []
                 );
 
                 // Add the value for this flat table.
-                $columns[] = $flatTableAlias . '.entity_id IS NOT NULL';
+                $columns[] = $flatTableAlias . '.'.$this->identityField.' IS NOT NULL';
             }
 
             // The column in_flat_table should be true if the product is in all flat tables, otherwise false.
@@ -203,8 +216,9 @@ class Collection extends DataCollection
 
     protected function addCategoryVisibility()
     {
+        $rootCat = ($this->storeManager->getStore($this->storeId)->getRootCategoryId()==0) ? 1 : $this->storeManager->getStore($this->storeId)->getRootCategoryId();
         // Init Root [Default] category
-        $category = $this->categoryRepository->get(2);
+        $category = $this->categoryRepository->get($rootCat);
         $this->productCollection->addStoreFilter($this->storeId);
         $this->collectionFilter->filter($this->productCollection, $category);
         $this->stockHelper->addIsInStockFilterToCollection($this->productCollection);
@@ -240,7 +254,7 @@ class Collection extends DataCollection
         // Join with default value table for the attribute.
         $select->joinLeft(
             [$table => $this->getTable('catalog_product_entity') . '_' . $attributeType],
-            $table . '.value_id= main_table.entity_id'
+            $table . '.'.$this->identityField.'= main_table.'.$this->identityField.''
             . ' AND ' . $table . '.attribute_id = \'' . $attributeId . '\''
             . ' AND ' . $table . '.store_id = \'' . Store::DEFAULT_STORE_ID . '\'',
             []
@@ -252,7 +266,7 @@ class Collection extends DataCollection
             // Join with store value table for the attribute.
             $select->joinLeft(
                 [$tableStore => $this->getTable('catalog_product_entity') . '_' . $attributeType],
-                $tableStore . '.value_id = main_table.entity_id'
+                $tableStore . '.'.$this->identityField.' = main_table.'.$this->identityField.''
                 . ' AND ' . $tableStore . '.attribute_id = \'' . $attributeId . '\''
                 . ' AND ' . $tableStore . '.store_id = \'' . $this->storeId . '\'',
                 []
@@ -290,7 +304,7 @@ class Collection extends DataCollection
 
             if ($this->getConnection()->isTableExists($flatTable)) {
                 // Filter on flat table, if it exists.
-                $select->where(new \Zend_Db_Expr('flat_table.entity_id ' . $valueCond));
+                $select->where(new \Zend_Db_Expr('flat_table.'.$this->identityField.' ' . $valueCond));
             }
         } else {
             // Filer on all flat tables, otherwise.
@@ -305,7 +319,7 @@ class Collection extends DataCollection
                     continue;
                 }
 
-                $columns[] = $flatTableAlias . '.entity_id ' . $valueCond;
+                $columns[] = $flatTableAlias . '.'.$this->identityField.' ' . $valueCond;
             }
 
             $select->where(new \Zend_Db_Expr('true AND (' . implode($value ? ' AND ' : ' OR ', $columns) . ')'));
@@ -468,5 +482,12 @@ class Collection extends DataCollection
         }
 
         return $this;
+    }
+    public function getIsCommerce(){
+        if($this->platformMetaData->getEdition() == ProductMetadata::EDITION_NAME){
+            return false;
+        } else {
+            return true;
+        }
     }
 }
