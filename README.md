@@ -65,6 +65,7 @@ Feel free to contribute and if there are any problems don't hesitate to open an 
 - Updated to version 2.0.0 Magento 2.3 compatablity. Magento 2.2 support is dropped. Fixed #12 and #13
 - Updated to version 2.1.0 Magento Fixing issues for compatibility with commerce and root category issue
 - Updated to version 2.1.1 Fix on broken query + removal of in flat table column due to deprecation
+- Updated to version 2.1.2 Fix broken module name
 ## Credits
 
 * Jerrol Etheredge (former co-worker who created the M1 version)
