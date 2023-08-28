@@ -30,6 +30,7 @@ class Collection extends DataCollection
     protected $sortDir;
     protected $platformMetaData;
     protected $identityField;
+    protected storeManager;
 
     /**
      * Maps field aliases to real fields.
