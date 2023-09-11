@@ -9,12 +9,13 @@
 
     },
     "authors": [
-    {
-      "name": "Synoptik Labs",
-      "email": "opensource@synoptik-labs.com",
-      "homepage": "https://www.synoptik-labs.com/",
-      "role": "Developer"
-    },
+        {
+            "name": "Synoptik Labs",
+            "email": "opensource@synoptik-labs.com",
+            "homepage": "https://www.synoptik-labs.com/",
+            "role": "Developer"
+        }
+    ],
     "type": "magento2-module",
     "version": "2.1.3",
     "license": [
