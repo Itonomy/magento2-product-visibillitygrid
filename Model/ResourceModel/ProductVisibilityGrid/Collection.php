@@ -210,7 +210,8 @@ class Collection extends DataCollection
             $this->_addAttribute($attribute);
         }
 
-        $this->addCategoryVisibility();
+        // Cause issue on the count query
+	//$this->addCategoryVisibility();
 
         return $this;
     }
