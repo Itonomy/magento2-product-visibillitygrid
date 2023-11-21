@@ -1,5 +1,5 @@
 {
-    "name": "itonomy/productvisibilitygrid",
+    "name": "synoptik-labs/productvisibilitygrid",
     "description": "",
     "require": {
         "php": ">=7.2",
@@ -8,8 +8,16 @@
     "suggest": {
 
     },
+    "authors": [
+        {
+            "name": "Synoptik Labs",
+            "email": "opensource@synoptik-labs.com",
+            "homepage": "https://www.synoptik-labs.com/",
+            "role": "Developer"
+        }
+    ],
     "type": "magento2-module",
-    "version": "2.1.2",
+    "version": "2.1.6",
     "license": [
         "MIT"
     ],
