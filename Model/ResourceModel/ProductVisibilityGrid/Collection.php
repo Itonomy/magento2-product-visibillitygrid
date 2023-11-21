@@ -211,7 +211,7 @@ class Collection extends DataCollection
         }
 
         // Cause issue on the count query
-	//$this->addCategoryVisibility();
+	    $this->addCategoryVisibility();
 
         return $this;
     }
@@ -224,7 +224,8 @@ class Collection extends DataCollection
         $this->productCollection->addStoreFilter($this->storeId);
         $this->collectionFilter->filter($this->productCollection, $category);
         $this->stockHelper->addIsInStockFilterToCollection($this->productCollection);
-        $this->productCollection->addAttributeToFilter('status', ['eq' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED]);
+        // TODO: Fix the filter to avoid huge load
+        // $this->productCollection->addAttributeToFilter('status', ['eq' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED]);
 
         $subSelect = $this->productCollection->getSelect();
         $this->productCollection->getSelect()
@@ -234,8 +235,6 @@ class Collection extends DataCollection
 
         $this->getSelect()->columns(['is_online_in_cat'=> new \Zend_Db_Expr('IF(category_collection.is_online_in_cat_sub,1,0)')]);
         $this->getSelect()->joinLeft(['category_collection'=>$subSelect], 'main_table.entity_id = category_collection.p_entity_id');
-
-        //echo $this->productCollection->getSelect();
     }
 
     /**
